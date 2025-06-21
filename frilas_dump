@@ -1,0 +1,110 @@
+-- Criação das tabelas e sequências
+CREATE SEQUENCE public.freelancer_freelancerid_seq START WITH 1 INCREMENT BY 1 NO MINVALUE NO MAXVALUE CACHE 1;
+
+CREATE TABLE public.freelancer (
+    freelancerid integer DEFAULT nextval('public.freelancer_freelancerid_seq'::regclass) NOT NULL,
+    freelancername character varying(255),
+    freelancerphone character varying(20),
+    freelancermail character varying(255),
+    isactive boolean,
+    PRIMARY KEY (freelancerid)
+);
+
+CREATE SEQUENCE public.hirer_hirerid_seq START WITH 1 INCREMENT BY 1 NO MINVALUE NO MAXVALUE CACHE 1;
+
+CREATE TABLE public.hirer (
+    hirerid integer DEFAULT nextval('public.hirer_hirerid_seq'::regclass) NOT NULL,
+    hirername character varying(255),
+    hirerphone character varying(20),
+    hirermail character varying(255),
+    isactive boolean,
+    PRIMARY KEY (hirerid)
+);
+
+CREATE SEQUENCE public.payment_paymentid_seq START WITH 1 INCREMENT BY 1 NO MINVALUE NO MAXVALUE CACHE 1;
+
+CREATE TABLE public.payment (
+    paymentid integer DEFAULT nextval('public.payment_paymentid_seq'::regclass) NOT NULL,
+    paymentvalue numeric,
+    paymentdate character varying(255),
+    paymentstatus integer,
+    hirerid integer,
+    freelancerid integer,
+    projectid integer,
+    PRIMARY KEY (paymentid)
+);
+
+CREATE SEQUENCE public.project_projectid_seq START WITH 1 INCREMENT BY 1 NO MINVALUE NO MAXVALUE CACHE 1;
+
+CREATE TABLE public.project (
+    projectid integer DEFAULT nextval('public.project_projectid_seq'::regclass) NOT NULL,
+    projectname character varying(255),
+    projectdescription character varying(255),
+    projectdeadline character varying(255),
+    projectstatus integer,
+    projectbudget numeric,
+    hirerid integer,
+    PRIMARY KEY (projectid)
+);
+
+CREATE SEQUENCE public.proposal_proposalid_seq START WITH 1 INCREMENT BY 1 NO MINVALUE NO MAXVALUE CACHE 1;
+
+CREATE TABLE public.proposal (
+    proposalid integer DEFAULT nextval('public.proposal_proposalid_seq'::regclass) NOT NULL,
+    proposalvalue numeric,
+    proposaldescription character varying(255),
+    proposalstatus integer,
+    freelancerid integer,
+    projectid integer,
+    PRIMARY KEY (proposalid)
+);
+
+CREATE SEQUENCE public.rating_ratingid_seq START WITH 1 INCREMENT BY 1 NO MINVALUE NO MAXVALUE CACHE 1;
+
+CREATE TABLE public.rating (
+    ratingid integer DEFAULT nextval('public.rating_ratingid_seq'::regclass) NOT NULL,
+    ratingvalue integer,
+    ratingdescription character varying(255),
+    hirerid integer,
+    freelancerid integer,
+    PRIMARY KEY (ratingid)
+);
+
+-- Inserção dos dados com INSERT INTO
+
+INSERT INTO public.freelancer (freelancerid, freelancername, freelancerphone, freelancermail, isactive) VALUES
+(1, 'Ana Souza', '+55 11 98765-4321', 'ana.souza@gmail.com', true),
+(2, 'Bruno Lima', '+55 21 99876-1234', 'bruno.lima@hotmail.com', true),
+(3, 'Carla Mendes', '+55 31 91234-5678', 'carla.mendes@yahoo.com', true);
+
+INSERT INTO public.hirer (hirerid, hirername, hirerphone, hirermail, isactive) VALUES
+(1, 'Eduardo Pereira', '+55 41 93322-4455', 'eduardo.p@gmail.com', true),
+(2, 'Fernanda Ribeiro', '+55 61 94433-2211', 'fernanda.ribeiro@empresa.com.br', true);
+
+INSERT INTO public.payment (paymentid, paymentvalue, paymentdate, paymentstatus, hirerid, freelancerid, projectid) VALUES
+(1, 56, '2024-12-01', 2, 1, 1, NULL),
+(2, 45, '2025-01-15', 1, 2, 2, 3),
+(3, 3, '2025-02-20', 2, 2, 2, 3);
+
+INSERT INTO public.project (projectid, projectname, projectdescription, projectdeadline, projectstatus, projectbudget, hirerid) VALUES
+(1, 'Website Institucional', 'Criação de site para empresa de contabilidade', '2025-05-01', 1, 5000, 1),
+(2, 'App de Finanças', 'Aplicativo para controle de gastos pessoais', '2025-06-10', 2, 12000, 2),
+(3, 'Landing Page Produto X', 'Landing page para lançamento de produto', '2025-04-25', 3, 3000, 2);
+
+INSERT INTO public.proposal (proposalid, proposalvalue, proposaldescription, proposalstatus, freelancerid, projectid) VALUES
+(1, 4800, 'Proposta para desenvolvimento completo do site.', 1, 1, 1),
+(3, 11000, 'Desenvolvimento de app com Flutter.', 2, 2, 2),
+(4, 2900, 'Landing responsiva com integração a formulário.', 2, 2, 3),
+(5, 2500, 'Layout moderno com HTML, CSS e JS puro.', 1, 2, 3);
+
+INSERT INTO public.rating (ratingid, ratingvalue, ratingdescription, hirerid, freelancerid) VALUES
+(1, 5, 'Excelente trabalho e comunicação clara.', 1, 1),
+(2, 3, 'Entrega no prazo, mas podia melhorar na documentação.', 2, 2);
+
+-- Atualizando os valores das sequências
+SELECT pg_catalog.setval('public.freelancer_freelancerid_seq', 3, true);
+SELECT pg_catalog.setval('public.hirer_hirerid_seq', 2, true);
+SELECT pg_catalog.setval('public.payment_paymentid_seq', 3, true);
+SELECT pg_catalog.setval('public.project_projectid_seq', 3, true);
+SELECT pg_catalog.setval('public.proposal_proposalid_seq', 6, true);
+SELECT pg_catalog.setval('public.rating_ratingid_seq', 2, true);
