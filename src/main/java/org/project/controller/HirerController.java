@@ -10,7 +10,7 @@ import java.sql.SQLException;
 
 public class HirerController {
 
-    public static void createHirer(MongoDatabase db) throws SQLException {
+    public static void createHirer(MongoDatabase db) {
         System.out.println("=== Creating a new hirer ===");
 
         System.out.print("Enter the hirer’s name: ");

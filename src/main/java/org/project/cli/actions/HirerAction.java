@@ -41,7 +41,7 @@ public class HirerAction {
                     ProjectController.deleteProject(db);
                     break;
                 case 4:
-                    ObjectId projectId = ProjectModel.selectProjectByHirer(db);
+                    ObjectId projectId = ProjectModel.selectNotStartedProjectByHirer(db);
                     if (projectId != null) {
                         ProposalController.acceptProposal(projectId, db);
                     }

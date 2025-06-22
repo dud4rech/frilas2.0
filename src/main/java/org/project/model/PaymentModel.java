@@ -28,6 +28,7 @@ public class PaymentModel {
                 .append("paymentdate", payment.getPaymentDate())
                 .append("freelancerid", payment.getFreelancerId())
                 .append("hirerid", payment.getHirerid())
+                .append("projectid", payment.getProjectId())
                 .append("paymentstatus", PaymentStatus.PENDING.getValue());
 
         InsertOneResult result = col.insertOne(document);
@@ -36,36 +37,33 @@ public class PaymentModel {
         }
     }
 
-    public static boolean listAllByUser(MongoDatabase db) {
+    public static void listAllByUser(MongoDatabase db) {
         MongoCollection<Document> col = db.getCollection("payment");
         ObjectId hirerId = LoginAction.getLoggedUser();
         boolean hasPayments = false;
-        int index = 1;
 
+        int index = 1;
         for (Document doc : col.find(eq("hirerid", hirerId))
                 .sort(Sorts.ascending("paymentdate"))) {
             hasPayments = true;
-            System.out.println("[" + index++ + "]");
-            printPayment(doc);
+            printPayment(doc, index);
         }
 
         if (!hasPayments) {
             System.out.println("\nThere are no payments.");
         }
-        return hasPayments;
     }
 
-    private static void printPayment(Document doc) {
-        ObjectId paymentId = doc.getObjectId("_id");
+    private static void printPayment(Document doc, int index) {
         Integer paymentValue = doc.getInteger("paymentvalue");
         String paymentDate = doc.getString("paymentdate");
         Integer paymentStatus = doc.getInteger("paymentstatus");
 
         String statusDescription = PaymentStatus.fromValue(paymentStatus).getDescription();
 
-        System.out.println("Value: " + paymentValue);
-        System.out.println("Date: " + paymentDate);
-        System.out.println("Status: " + statusDescription);
+        System.out.println(index + ". Value: " + paymentValue);
+        System.out.println("   Date: " + paymentDate);
+        System.out.println("   Status: " + statusDescription);
         System.out.println("------------------------");
     }
 
@@ -87,8 +85,7 @@ public class PaymentModel {
 
         int index = 1;
         for (Document doc : pendingPayments) {
-            System.out.println("[" + index++ + "]");
-            PaymentModel.printPayment(doc);
+            PaymentModel.printPayment(doc, index);
         }
 
         System.out.print("Choose a payment by number: ");

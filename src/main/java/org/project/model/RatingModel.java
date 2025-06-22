@@ -34,53 +34,50 @@ public class RatingModel {
         }
     }
 
-    public static int delete(RatingBean rating, MongoDatabase database) {
+    public static boolean deleteById(ObjectId ratingId, MongoDatabase database) {
         MongoCollection<Document> col = database.getCollection("rating");
 
-        DeleteResult result = col.deleteOne(
-                Filters.eq("ratingid", rating.getRatingId())
-        );
-
-        return (int) result.getDeletedCount();
+        DeleteResult result = col.deleteOne(eq("_id", ratingId));
+        return result.getDeletedCount() > 0;
     }
 
     public static boolean listAllByHirer(MongoDatabase database) {
         MongoCollection<Document> col = database.getCollection("rating");
         ObjectId hirerId = LoginAction.getLoggedUser();
-        boolean hasRatings = false;
+        List<Document> ratings = col.find(eq("hirerid", hirerId)).sort(Sorts.ascending("_id")).into(new ArrayList<>());
 
-        for (Document doc : col.find(Filters.eq("hirerid", hirerId))
-                .sort(Sorts.ascending("_id"))) {
-            hasRatings = true;
-            printRating(doc);
-        }
-
-        if (!hasRatings) {
+        if (ratings.isEmpty()) {
             System.out.println("\nThere are no ratings created.");
+            return false;
         }
-        return hasRatings;
+
+        int index = 1;
+        for (Document doc : ratings) {
+            printRating(doc, index++);
+        }
+        return true;
     }
 
-    public static void listAllByFreelancer(MongoDatabase database) {
-        MongoCollection<Document> collection = database.getCollection("rating");
+    public static boolean listAllByFreelancer(MongoDatabase database) {
+        MongoCollection<Document> col = database.getCollection("rating");
         ObjectId freelancerId = LoginAction.getLoggedUser();
-        boolean hasRatings = false;
+        List<Document> ratings = col.find(eq("freelancerid", freelancerId)).sort(Sorts.ascending("_id")).into(new ArrayList<>());
 
-        for (Document doc : collection.find(Filters.eq("freelancerid", freelancerId))
-                .sort(Sorts.ascending("_id"))) {
-            hasRatings = true;
-            printRating(doc);
-        }
-
-        if (!hasRatings) {
+        if (ratings.isEmpty()) {
             System.out.println("\nThere are no ratings created.");
+            return false;
         }
+
+        int index = 1;
+        for (Document doc : ratings) {
+            printRating(doc, index++);
+        }
+        return true;
     }
 
-    public static boolean listFreelancersInProjects(MongoDatabase database) {
+    public static List<Document> listFreelancersWithoutRating(MongoDatabase database) {
         MongoCollection<Document> freelancerCollection = database.getCollection("freelancer");
         ObjectId hirerId = LoginAction.getLoggedUser();
-        boolean hasRelatedFreelancer = false;
 
         List<Document> pipeline = Arrays.asList(
                 new Document("$lookup", new Document()
@@ -89,23 +86,18 @@ public class RatingModel {
                         .append("foreignField", "freelancerid")
                         .append("as", "proposals")
                 ),
-
                 new Document("$unwind", "$proposals"),
-
                 new Document("$lookup", new Document()
                         .append("from", "project")
                         .append("localField", "proposals.projectid")
                         .append("foreignField", "_id")
                         .append("as", "project")
                 ),
-
                 new Document("$unwind", "$project"),
-
                 new Document("$match", new Document("$and", Arrays.asList(
                         new Document("project.hirerid", hirerId),
                         new Document("proposals.proposalstatus", 2)
                 ))),
-
                 new Document("$lookup", new Document()
                         .append("from", "rating")
                         .append("let", new Document("freelancerId", "$_id"))
@@ -117,9 +109,7 @@ public class RatingModel {
                         ))
                         .append("as", "ratings")
                 ),
-
                 new Document("$match", new Document("ratings", new Document("$size", 0))),
-
                 new Document("$project", new Document()
                         .append("_id", 1)
                         .append("freelancername", 1)
@@ -127,34 +117,26 @@ public class RatingModel {
                 )
         );
 
-        if (!hasRelatedFreelancer) {
+        List<Document> results = freelancerCollection.aggregate(pipeline).into(new ArrayList<>());
+
+        if (results.isEmpty()) {
             System.out.println("\nThere are no related freelancers.");
+            return results;
         }
-        return hasRelatedFreelancer;
-    }
 
-    public static void printRating(Document doc) {
-        Integer ratingId = doc.getInteger("ratingid");
-        Integer ratingValue = doc.getInteger("ratingvalue");
-        String ratingDescription = doc.getString("ratingdescription");
+        int index = 1;
+        for (Document doc : results) {
+            System.out.println(index++ + ". Name: " + doc.getString("freelancername"));
+            System.out.println("   Phone: " + doc.getString("freelancerphone"));
+            System.out.println("------------------------");
+        }
 
-        System.out.println("Rating ID: " + ratingId);
-        System.out.println("Value: " + ratingValue);
-        System.out.println("Description: " + ratingDescription);
-        System.out.println("------------------------");
+        return results;
     }
 
     public static List<Document> listRatingsByHirer(ObjectId hirerId, MongoDatabase db) {
         MongoCollection<Document> col = db.getCollection("rating");
-
         return col.find(eq("hirerid", hirerId)).into(new ArrayList<>());
-    }
-
-    public static int deleteById(ObjectId ratingId, MongoDatabase db) {
-        MongoCollection<Document> col = db.getCollection("rating");
-
-        DeleteResult result = col.deleteOne(eq("_id", ratingId));
-        return (int) result.getDeletedCount();
     }
 
     public static List<Document> listAllFreelancers(MongoDatabase db) {
@@ -162,4 +144,12 @@ public class RatingModel {
         return col.find().into(new ArrayList<>());
     }
 
+    public static void printRating(Document doc, int index) {
+        Integer ratingValue = doc.getInteger("ratingvalue");
+        String ratingDescription = doc.getString("ratingdescription");
+
+        System.out.println(index + ". Value: " + ratingValue);
+        System.out.println("   Description: " + ratingDescription);
+        System.out.println("------------------------");
+    }
 }

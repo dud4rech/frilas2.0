@@ -22,12 +22,10 @@ public class RatingAction {
 
             switch (command) {
                 case 1:
-                    boolean hasRelatedFreelancer = RatingModel.listFreelancersInProjects(db);
-                    if (hasRelatedFreelancer) RatingController.createRating(db);
+                    RatingController.createRating(db);
                     return;
                 case 2:
-                    boolean hasRatings = RatingModel.listAllByHirer(db);
-                    if (hasRatings) RatingController.deleteRating(db);
+                    RatingController.deleteRating(db);
                     return;
                 case 3:
                     ActionLineInterface.execute(db);

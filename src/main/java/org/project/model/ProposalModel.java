@@ -1,5 +1,6 @@
 package org.project.model;
 
+import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
@@ -35,12 +36,12 @@ public class ProposalModel {
         }
     }
 
-    public static int update(ProposalBean proposal, MongoDatabase database) {
+    public static boolean update(ProposalBean proposal, MongoDatabase database) {
         MongoCollection<Document> col = database.getCollection("proposal");
 
         UpdateResult result = col.updateOne(
                 Filters.and(
-                        Filters.eq("_id", proposal.getProposalId()),
+                        eq("_id", proposal.getProposalId()),
                         Filters.ne("proposalstatus", ProposalStatus.ACCEPTED.getValue())
                 ),
                 Updates.combine(
@@ -49,45 +50,45 @@ public class ProposalModel {
                 )
         );
 
-        return (int) result.getModifiedCount();
+        return result.getModifiedCount() > 0;
     }
 
-    public static int delete(ProposalBean proposal, MongoDatabase database) {
-        MongoCollection<Document> collection = database.getCollection("proposal");
+    public static boolean delete(ProposalBean proposal, MongoDatabase database) {
+        MongoCollection<Document> col = database.getCollection("proposal");
 
-        DeleteResult result = collection.deleteOne(
+        DeleteResult result = col.deleteOne(
                 Filters.and(
-                        Filters.eq("_id", proposal.getProposalId()),
+                        eq("_id", proposal.getProposalId()),
                         Filters.ne("proposalstatus", ProposalStatus.ACCEPTED.getValue())
                 )
         );
 
-        return (int) result.getDeletedCount();
+        return result.getDeletedCount() > 0;
     }
 
-    public static int updateStatus(ProposalBean proposal, MongoDatabase database) {
-        MongoCollection<Document> collection = database.getCollection("proposal");
+    public static boolean updateStatus(ProposalBean proposal, MongoDatabase database) {
+        MongoCollection<Document> col = database.getCollection("proposal");
 
-        UpdateResult result = collection.updateOne(
-                Filters.eq("_id", proposal.getProposalId()),
+        UpdateResult result = col.updateOne(
+                eq("_id", proposal.getProposalId()),
                 Updates.set("proposalstatus", ProposalStatus.ACCEPTED.getValue())
         );
 
-        return (int) result.getModifiedCount();
+        return result.getModifiedCount() > 0;
     }
 
     public static Map<String, Object> findProjectAndProposalDetails(ObjectId proposalId, MongoDatabase database) {
-        MongoCollection<Document> proposalCollection = database.getCollection("proposal");
-        MongoCollection<Document> projectCollection = database.getCollection("project");
+        MongoCollection<Document> proposalCol = database.getCollection("proposal");
+        MongoCollection<Document> projectCol = database.getCollection("project");
 
-        Document proposal = proposalCollection.find(Filters.eq("_id", proposalId)).first();
+        Document proposal = proposalCol.find(eq("_id", proposalId)).first();
         if (proposal == null) {
             System.out.println("\nProposal not found!\n");
             return null;
         }
 
         ObjectId projectId = proposal.getObjectId("projectid");
-        Document project = projectCollection.find(Filters.eq("_id", projectId)).first();
+        Document project = projectCol.find(eq("_id", projectId)).first();
         if (project == null) {
             System.out.println("\nProject not found!\n");
             return null;
@@ -103,37 +104,54 @@ public class ProposalModel {
     }
 
     public static List<ObjectId> listUserProposals(MongoDatabase database) {
-        MongoCollection<Document> collection = database.getCollection("proposal");
+        MongoCollection<Document> col = database.getCollection("proposal");
         ObjectId freelancerId = LoginAction.getLoggedUser();
         List<ObjectId> ids = new ArrayList<>();
 
-        List<Document> proposals = collection.find(Filters.eq("freelancerid", freelancerId))
-                .sort(new Document("_id", 1)).into(new ArrayList<>());
+        List<Document> proposals = col.find(
+                Filters.and(
+                        eq("freelancerid", freelancerId),
+                        eq("proposalstatus", ProposalStatus.CREATED.getValue())
+                )
+        ).sort(new Document("_id", 1)).into(new ArrayList<>());
 
-        for (int i = 0; i < proposals.size(); i++) {
-            Document doc = proposals.get(i);
+        int index = 1;
+        for (Document doc : proposals) {
             ids.add(doc.getObjectId("_id"));
-            printProposalWithIndex(doc, i + 1);
+            printProposalWithIndex(doc, index++);
         }
 
         if (ids.isEmpty()) {
             System.out.println("\nThere are no proposals available.");
         }
+
         return ids;
     }
 
     public static void listHirerProposals(MongoDatabase database) {
-        MongoCollection<Document> collection = database.getCollection("proposal");
+        MongoCollection<Document> col = database.getCollection("proposal");
         ObjectId hirerId = LoginAction.getLoggedUser();
+
+        List<Document> pipeline = Arrays.asList(
+                new Document("$lookup", new Document()
+                        .append("from", "project")
+                        .append("localField", "projectid")
+                        .append("foreignField", "_id")
+                        .append("as", "project")
+                ),
+                new Document("$unwind", "$project"),
+                new Document("$match", new Document("project.hirerid", hirerId)),
+                new Document("$sort", new Document("_id", 1))
+        );
+
+        AggregateIterable<Document> results = col.aggregate(pipeline);
+
         List<ObjectId> ids = new ArrayList<>();
+        int index = 1;
 
-        List<Document> proposals = collection.find(Filters.eq("hirerid", hirerId))
-                .sort(new Document("_id", 1)).into(new ArrayList<>());
-
-        for (int i = 0; i < proposals.size(); i++) {
-            Document doc = proposals.get(i);
+        for (Document doc : results) {
             ids.add(doc.getObjectId("_id"));
-            printProposalWithIndex(doc, i + 1);
+            printProposalWithIndex(doc, index++);
         }
 
         if (ids.isEmpty()) {
@@ -142,20 +160,20 @@ public class ProposalModel {
     }
 
     public static List<ObjectId> listProposalsByProject(ObjectId projectId, MongoDatabase database) {
-        MongoCollection<Document> collection = database.getCollection("proposal");
+        MongoCollection<Document> col = database.getCollection("proposal");
         List<ObjectId> ids = new ArrayList<>();
 
-        List<Document> proposals = collection.find(
+        List<Document> proposals = col.find(
                 Filters.and(
-                            eq("projectid", projectId),
-                            eq("proposalstatus", ProposalStatus.CREATED.getValue())
-                        ))
-                .sort(new Document("_id", 1)).into(new ArrayList<>());
+                        eq("projectid", projectId),
+                        eq("proposalstatus", ProposalStatus.CREATED.getValue())
+                )
+        ).sort(new Document("_id", 1)).into(new ArrayList<>());
 
-        for (int i = 0; i < proposals.size(); i++) {
-            Document doc = proposals.get(i);
+        int index = 1;
+        for (Document doc : proposals) {
             ids.add(doc.getObjectId("_id"));
-            printProposalWithIndex(doc, i + 1);
+            printProposalWithIndex(doc, index++);
         }
 
         return ids;

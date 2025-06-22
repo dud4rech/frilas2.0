@@ -63,9 +63,9 @@ public class ProposalController {
         String proposalDescription = Utils.readString();
 
         ProposalBean proposal = new ProposalBean(proposalId, proposalValue, proposalDescription);
-        int proposalUpdated = ProposalModel.update(proposal, db);
+        boolean proposalUpdated = ProposalModel.update(proposal, db);
 
-        if (proposalUpdated == 0) {
+        if (proposalUpdated) {
             System.out.println("\nProposal not edited or it doesn't exist.");
         } else {
             System.out.println("\nProposal edited successfully!");
@@ -87,9 +87,9 @@ public class ProposalController {
         ObjectId proposalId = proposalIds.get(choice - 1);
 
         ProposalBean proposal = new ProposalBean(proposalId);
-        int proposalDeleted = ProposalModel.delete(proposal, db);
+        boolean proposalDeleted = ProposalModel.delete(proposal, db);
 
-        if (proposalDeleted == 0) {
+        if (proposalDeleted) {
             System.out.println("\nProposal not deleted or it doesn't exist.");
         } else {
             System.out.println("\nProposal deleted successfully!");
@@ -97,12 +97,12 @@ public class ProposalController {
     }
 
     public static void acceptProposal(ObjectId projectId, MongoDatabase db) throws SQLException {
+        System.out.println("\n=== Accepting a proposal ===\n");
         List<ObjectId> proposalIds = ProposalModel.listProposalsByProject(projectId, db);
         if (proposalIds.isEmpty()) {
             System.out.println("\nThere are no proposals for this project.");
             return;
         }
-        System.out.println("\n=== Accepting a proposal ===\n");
 
         System.out.print("Choose a proposal by number: ");
         int choice = Utils.readInt();
@@ -113,11 +113,11 @@ public class ProposalController {
         ObjectId proposalId = proposalIds.get(choice - 1);
 
         ProposalBean proposal = new ProposalBean(proposalId);
-        int proposalAccepted = ProposalModel.updateStatus(proposal, db);
+        boolean proposalAccepted = ProposalModel.updateStatus(proposal, db);
 
         System.out.println("\nProposal accepted successfully!");
 
-        if (proposalAccepted > -1) {
+        if (proposalAccepted) {
             ProjectModel.updateStatus(projectId, db);
 
             Map<String, Object> details = ProposalModel.findProjectAndProposalDetails(proposalId, db);

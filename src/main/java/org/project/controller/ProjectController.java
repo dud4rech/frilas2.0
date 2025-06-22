@@ -7,13 +7,12 @@ import org.project.cli.actions.LoginAction;
 import org.project.model.ProjectModel;
 import org.project.utils.Utils;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ProjectController {
 
-    public static void createProject(MongoDatabase db) throws SQLException {
+    public static void createProject(MongoDatabase db) {
         System.out.println("=== Creating a new project ===");
 
         System.out.print("Enter the project name: ");
@@ -36,13 +35,13 @@ public class ProjectController {
         System.out.println("\nProject created successfully!");
     }
 
-    public static void updateProject(MongoDatabase db) throws SQLException {
-        System.out.println("=== Editing a project ===");
-
+    public static void updateProject(MongoDatabase db) {
         List<ObjectId> projectIds = new ArrayList<>();
         boolean hasProjects = ProjectModel.listAllByUserWithSelection(db, projectIds);
 
         if (!hasProjects) return;
+
+        System.out.println("=== Editing a project ===");
 
         ObjectId chosenId = ProjectModel.chooseProjectFromList(projectIds);
         if (chosenId == null) return;
@@ -60,16 +59,16 @@ public class ProjectController {
         int projectBudget = Utils.readInt();
 
         ProjectBean project = new ProjectBean(projectName, projectDescription, projectDeadline, projectBudget);
-        int projectUpdated = ProjectModel.update(project, db, chosenId);
+        boolean projectUpdated = ProjectModel.update(project, db, chosenId);
 
-        if (projectUpdated == 0) {
+        if (projectUpdated) {
             System.out.println("\nProject not edited or it doesn't exist.");
         } else {
             System.out.println("\nProject edited successfully!");
         }
     }
 
-    public static void deleteProject(MongoDatabase db) throws SQLException {
+    public static void deleteProject(MongoDatabase db) {
         System.out.println("=== Deleting a project ===");
 
         List<ObjectId> projectIds = new ArrayList<>();
@@ -80,9 +79,9 @@ public class ProjectController {
         ObjectId chosenId = ProjectModel.chooseProjectFromList(projectIds);
         if (chosenId == null) return;
 
-        int projectDeleted = ProjectModel.delete(chosenId, db);
+        boolean projectDeleted = ProjectModel.delete(chosenId, db);
 
-        if (projectDeleted == 0) {
+        if (projectDeleted) {
             System.out.println("\nProject not deleted or it doesn't exist.");
         } else {
             System.out.println("\nProject deleted successfully!");

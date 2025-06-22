@@ -12,7 +12,6 @@ import java.sql.SQLException;
 public class ReportAction {
 
     public static void execute(int user, MongoDatabase db) throws SQLException {
-
         System.out.println("\nWhich report would you like to generate?");
 
         if (UserType.HIRER.getValue() == user) {
