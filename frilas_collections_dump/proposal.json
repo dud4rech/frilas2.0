@@ -1,0 +1,34 @@
+[
+  {
+    "_id": { "$oid": "66a5cc3c1cdb9f3a35e2a301" },
+    "value": 4800,
+    "description": "Proposta para desenvolvimento completo do site.",
+    "status": 1,
+    "freelancerId": { "$oid": "66a5cb5c7cdb9f3a35e2a001" },
+    "projectId": { "$oid": "66a5cc1e1cdb9f3a35e2a201" }
+  },
+  {
+    "_id": { "$oid": "66a5cc3c1cdb9f3a35e2a302" },
+    "value": 11000,
+    "description": "Desenvolvimento de app com Flutter.",
+    "status": 2,
+    "freelancerId": { "$oid": "66a5cb5c7cdb9f3a35e2a002" },
+    "projectId": { "$oid": "66a5cc1e1cdb9f3a35e2a202" }
+  },
+  {
+    "_id": { "$oid": "66a5cc3c1cdb9f3a35e2a303" },
+    "value": 2900,
+    "description": "Landing responsiva com integração a formulário.",
+    "status": 2,
+    "freelancerId": { "$oid": "66a5cb5c7cdb9f3a35e2a002" },
+    "projectId": { "$oid": "66a5cc1e1cdb9f3a35e2a203" }
+  },
+  {
+    "_id": { "$oid": "66a5cc3c1cdb9f3a35e2a304" },
+    "value": 2500,
+    "description": "Layout moderno com HTML, CSS e JS puro.",
+    "status": 1,
+    "freelancerId": { "$oid": "66a5cb5c7cdb9f3a35e2a002" },
+    "projectId": { "$oid": "66a5cc1e1cdb9f3a35e2a203" }
+  }
+]

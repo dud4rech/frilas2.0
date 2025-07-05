@@ -1,0 +1,23 @@
+[
+  {
+    "_id": { "$oid": "66a5cb5c7cdb9f3a35e2a001" },
+    "name": "Ana Souza",
+    "phone": "+55 11 98765-4321",
+    "email": "ana.souza@gmail.com",
+    "isActive": true
+  },
+  {
+    "_id": { "$oid": "66a5cb5c7cdb9f3a35e2a002" },
+    "name": "Bruno Lima",
+    "phone": "+55 21 99876-1234",
+    "email": "bruno.lima@hotmail.com",
+    "isActive": true
+  },
+  {
+    "_id": { "$oid": "66a5cb5c7cdb9f3a35e2a003" },
+    "name": "Carla Mendes",
+    "phone": "+55 31 91234-5678",
+    "email": "carla.mendes@yahoo.com",
+    "isActive": true
+  }
+]

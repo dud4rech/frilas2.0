@@ -1,0 +1,29 @@
+[
+  {
+    "_id": { "$oid": "66a5cc1e1cdb9f3a35e2a201" },
+    "name": "Website Institucional",
+    "description": "Criação de site para empresa de contabilidade",
+    "deadline": "2025-05-01",
+    "status": 1,
+    "budget": 5000,
+    "hirerId": { "$oid": "66a5cc001cdb9f3a35e2a101" }
+  },
+  {
+    "_id": { "$oid": "66a5cc1e1cdb9f3a35e2a202" },
+    "name": "App de Finanças",
+    "description": "Aplicativo para controle de gastos pessoais",
+    "deadline": "2025-06-10",
+    "status": 2,
+    "budget": 12000,
+    "hirerId": { "$oid": "66a5cc001cdb9f3a35e2a102" }
+  },
+  {
+    "_id": { "$oid": "66a5cc1e1cdb9f3a35e2a203" },
+    "name": "Landing Page Produto X",
+    "description": "Landing page para lançamento de produto",
+    "deadline": "2025-04-25",
+    "status": 3,
+    "budget": 3000,
+    "hirerId": { "$oid": "66a5cc001cdb9f3a35e2a102" }
+  }
+]

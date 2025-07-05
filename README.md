@@ -28,8 +28,11 @@ mvn clean install
 
 1. No MongoDB Compass, criar uma nova conexão chamada 'frilas';
 2. Nessa nova conexão, criar uma base de dados chamada 'frilas';
-3. Em seguida, criar as seguintes coleções na base: freelancer, hirer, project, proposal, payment e rating.
-
+3. Para cada uma das collections na pasta frilas_collections_dump faça:
+   1. Criar a collection manualmente (por exemplo, para freelancer.json criar a collection freelancer);
+   2. Clicar em Add Data > Import Json;
+   3. Selecionar o json correspondente e confirmar importação;
+   
 ## Compilar e executar a aplicação
 ```
 mvn clean compile

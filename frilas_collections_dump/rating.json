@@ -1,0 +1,16 @@
+[
+  {
+    "_id": { "$oid": "66a5cc671cdb9f3a35e2a501" },
+    "value": 5,
+    "description": "Excelente trabalho e comunicação clara.",
+    "hirerId": { "$oid": "66a5cc001cdb9f3a35e2a101" },
+    "freelancerId": { "$oid": "66a5cb5c7cdb9f3a35e2a001" }
+  },
+  {
+    "_id": { "$oid": "66a5cc671cdb9f3a35e2a502" },
+    "value": 3,
+    "description": "Entrega no prazo, mas podia melhorar na documentação.",
+    "hirerId": { "$oid": "66a5cc001cdb9f3a35e2a102" },
+    "freelancerId": { "$oid": "66a5cb5c7cdb9f3a35e2a002" }
+  }
+]
