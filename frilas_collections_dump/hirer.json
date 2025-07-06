@@ -1,16 +1,16 @@
 [
   {
     "_id": { "$oid": "66a5cc001cdb9f3a35e2a101" },
-    "name": "Eduardo Pereira",
-    "phone": "+55 41 93322-4455",
-    "email": "eduardo.p@gmail.com",
-    "isActive": true
+    "hirername": "Eduardo Pereira",
+    "hirerphone": "+55 41 93322-4455",
+    "hirermail": "eduardo.p@gmail.com",
+    "isactive": true
   },
   {
     "_id": { "$oid": "66a5cc001cdb9f3a35e2a102" },
-    "name": "Fernanda Ribeiro",
-    "phone": "+55 61 94433-2211",
-    "email": "fernanda.ribeiro@empresa.com.br",
-    "isActive": true
+    "hirername": "Fernanda Ribeiro",
+    "hirerphone": "+55 61 94433-2211",
+    "hirermail": "fernanda.ribeiro@empresa.com.br",
+    "isactive": true
   }
 ]

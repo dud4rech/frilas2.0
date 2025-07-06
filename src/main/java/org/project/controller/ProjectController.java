@@ -62,9 +62,9 @@ public class ProjectController {
         boolean projectUpdated = ProjectModel.update(project, db, chosenId);
 
         if (projectUpdated) {
-            System.out.println("\nProject not edited or it doesn't exist.");
-        } else {
             System.out.println("\nProject edited successfully!");
+        } else {
+            System.out.println("\nProject not edited or it doesn't exist.");
         }
     }
 
@@ -82,9 +82,9 @@ public class ProjectController {
         boolean projectDeleted = ProjectModel.delete(chosenId, db);
 
         if (projectDeleted) {
-            System.out.println("\nProject not deleted or it doesn't exist.");
-        } else {
             System.out.println("\nProject deleted successfully!");
+        } else {
+            System.out.println("\nProject not deleted or it doesn't exist.");
         }
     }
 }

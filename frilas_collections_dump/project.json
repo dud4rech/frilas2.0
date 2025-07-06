@@ -1,29 +1,29 @@
 [
   {
     "_id": { "$oid": "66a5cc1e1cdb9f3a35e2a201" },
-    "name": "Website Institucional",
-    "description": "Criação de site para empresa de contabilidade",
-    "deadline": "2025-05-01",
-    "status": 1,
-    "budget": 5000,
-    "hirerId": { "$oid": "66a5cc001cdb9f3a35e2a101" }
+    "projectname": "Website Institucional",
+    "projectdescription": "Criação de site para empresa de contabilidade",
+    "projectdeadline": "2025-05-01",
+    "projectstatus": 1,
+    "projectbudget": 5000,
+    "hirerid": { "$oid": "66a5cc001cdb9f3a35e2a101" }
   },
   {
     "_id": { "$oid": "66a5cc1e1cdb9f3a35e2a202" },
-    "name": "App de Finanças",
-    "description": "Aplicativo para controle de gastos pessoais",
-    "deadline": "2025-06-10",
-    "status": 2,
-    "budget": 12000,
-    "hirerId": { "$oid": "66a5cc001cdb9f3a35e2a102" }
+    "projectname": "App de Finanças",
+    "projectdescription": "Aplicativo para controle de gastos pessoais",
+    "projectdeadline": "2025-06-10",
+    "projectstatus": 2,
+    "projectbudget": 12000,
+    "hirerid": { "$oid": "66a5cc001cdb9f3a35e2a102" }
   },
   {
     "_id": { "$oid": "66a5cc1e1cdb9f3a35e2a203" },
-    "name": "Landing Page Produto X",
-    "description": "Landing page para lançamento de produto",
-    "deadline": "2025-04-25",
-    "status": 3,
-    "budget": 3000,
-    "hirerId": { "$oid": "66a5cc001cdb9f3a35e2a102" }
+    "projectname": "Landing Page Produto X",
+    "projectdescription": "Landing page para lançamento de produto",
+    "projectdeadline": "2025-04-25",
+    "projectstatus": 3,
+    "projectbudget": 3000,
+    "hirerid": { "$oid": "66a5cc001cdb9f3a35e2a102" }
   }
 ]

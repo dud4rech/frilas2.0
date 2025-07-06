@@ -66,9 +66,9 @@ public class ProposalController {
         boolean proposalUpdated = ProposalModel.update(proposal, db);
 
         if (proposalUpdated) {
-            System.out.println("\nProposal not edited or it doesn't exist.");
+            System.out.println("\nProposal edited successfully.");
         } else {
-            System.out.println("\nProposal edited successfully!");
+            System.out.println("\nProposal not edited or it doesn't exist.");
         }
     }
 
@@ -90,9 +90,9 @@ public class ProposalController {
         boolean proposalDeleted = ProposalModel.delete(proposal, db);
 
         if (proposalDeleted) {
-            System.out.println("\nProposal not deleted or it doesn't exist.");
-        } else {
             System.out.println("\nProposal deleted successfully!");
+        } else {
+            System.out.println("\nProposal not deleted or it doesn't exist.");
         }
     }
 

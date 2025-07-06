@@ -1,29 +1,29 @@
 [
   {
     "_id": { "$oid": "66a5cc521cdb9f3a35e2a401" },
-    "value": 56,
-    "date": "2024-12-01",
-    "status": 2,
-    "hirerId": { "$oid": "66a5cc001cdb9f3a35e2a101" },
-    "freelancerId": { "$oid": "66a5cb5c7cdb9f3a35e2a001" },
-    "projectId": { "$oid": "66a5cc1e1cdb9f3a35e2a201" }
+    "paymentvalue": 56,
+    "paymentedate": "2024-12-01",
+    "paymentstatus": 2,
+    "hirerid": { "$oid": "66a5cc001cdb9f3a35e2a101" },
+    "freelancerid": { "$oid": "66a5cb5c7cdb9f3a35e2a001" },
+    "projectid": { "$oid": "66a5cc1e1cdb9f3a35e2a201" }
   },
   {
     "_id": { "$oid": "66a5cc521cdb9f3a35e2a402" },
-    "value": 45,
-    "date": "2025-01-15",
-    "status": 1,
-    "hirerId": { "$oid": "66a5cc001cdb9f3a35e2a102" },
-    "freelancerId": { "$oid": "66a5cb5c7cdb9f3a35e2a002" },
-    "projectId": { "$oid": "66a5cc1e1cdb9f3a35e2a203" }
+    "paymentvalue": 45,
+    "paymentedate": "2025-01-15",
+    "paymentstatus": 1,
+    "hirerid": { "$oid": "66a5cc001cdb9f3a35e2a102" },
+    "freelancerid": { "$oid": "66a5cb5c7cdb9f3a35e2a002" },
+    "projectid": { "$oid": "66a5cc1e1cdb9f3a35e2a203" }
   },
   {
     "_id": { "$oid": "66a5cc521cdb9f3a35e2a403" },
-    "value": 3,
-    "date": "2025-02-20",
-    "status": 2,
-    "hirerId": { "$oid": "66a5cc001cdb9f3a35e2a102" },
-    "freelancerId": { "$oid": "66a5cb5c7cdb9f3a35e2a002" },
-    "projectId": { "$oid": "66a5cc1e1cdb9f3a35e2a203" }
+    "paymentvalue": 3,
+    "paymentedate": "2025-02-20",
+    "paymentstatus": 2,
+    "hirerid": { "$oid": "66a5cc001cdb9f3a35e2a102" },
+    "freelancerid": { "$oid": "66a5cb5c7cdb9f3a35e2a002" },
+    "projectid": { "$oid": "66a5cc1e1cdb9f3a35e2a203" }
   }
 ]
